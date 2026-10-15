@@ -1,0 +1,13 @@
+{
+  "name": "meu-projeto-cypress",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Projeto Cypress do ecrã de login, no Padrão de Elementos.",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --spec cypress/e2e/login/login.cy.js"
+  },
+  "devDependencies": {
+    "cypress": "^13.7.3"
+  }
+}
