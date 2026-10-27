@@ -22,7 +22,7 @@ Na pasta do projeto, instale as dependências uma vez. Esse comando traz o Cypre
 npm install
 ```
 
-Se a pasta `node_modules` já existir, a instalação já foi feita. Chrome e Edge precisam estar instalados no Windows. O Electron vem com o Cypress. O Firefox instalado na máquina pode ser mais novo do que o Cypress 13.7 consegue abrir. Na primeira execução com `--browser firefox`, o projeto baixa o Firefox 128 para `cypress/browsers` e usa essa cópia. O Firefox do sistema não é substituído.
+Se a pasta `node_modules` já existir, a instalação já foi feita. A execução usa o Electron, que vem com o Cypress, e o Chrome, que precisa estar instalado no Windows.
 
 Os comandos abaixo partem da pasta do projeto.
 
@@ -40,18 +40,16 @@ npx cypress run --spec "cypress/e2e/Caso de Teste 1 - Registar Utilizador/Caso d
 
 Para ver o navegador durante o teste, troque o comando por `npx cypress open`, escolha E2E Testing, o navegador e o arquivo do caso. Essa forma interativa não grava o `relatorio.md`.
 
-Electron, Chrome, Firefox e Edge entram com `--browser`. Sem essa opção, o Cypress usa o Electron:
+A suite roda no Electron e no Chrome. Sem `--browser`, o Cypress usa o Electron:
 
 ```powershell
 npx cypress run --browser electron --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
 npx cypress run --browser chrome --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
-npx cypress run --browser firefox --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
-npx cypress run --browser edge --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
 ```
 
 Sem `--spec`, o `npx cypress run` também executa a comparação entre CSS e XPath e o login por XPath. A suite fica com doze testes, não só os nove casos.
 
-Durante a execução o Cypress acessa `http://automationexercise.com`, gera um e-mail novo e percorre o caso. A senha e o endereço saem da fixture. No fim, o terminal mostra o que passou e o que falhou, e o arquivo `relatorio.md` da raiz é reescrito com o navegador, a duração e o resultado de cada cenário. A seção final compara a última execução de cada navegador: Electron, Chrome, Firefox e Edge. Rodar um deles de novo substitui só a linha daquele navegador. A suite dos nove casos leva cerca de quatro a cinco minutos.
+Durante a execução o Cypress acessa `http://automationexercise.com`, gera um e-mail novo e percorre o caso. A senha e o endereço saem da fixture. No fim, o terminal mostra o que passou e o que falhou, e o arquivo `relatorio.md` da raiz é reescrito com o navegador, a duração e o resultado de cada cenário. A seção final compara a última execução do Electron e do Chrome. Rodar um deles de novo substitui só a linha daquele navegador. A suite dos nove casos leva cerca de quatro a cinco minutos.
 
 ## Estrutura, padrão, relatório e navegadores
 
@@ -64,7 +62,7 @@ WEB/
 ├── README.md
 ├── relatorio.md               última execução e comparativo dos navegadores
 ├── .github/workflows/
-│   └── testes-agendados.yml   Electron, Chrome, Firefox e Edge no GitHub Actions
+│   └── testes-agendados.yml   Electron e Chrome no GitHub Actions
 └── cypress/
     ├── elements/              um mapa por tela, só seletores
     ├── pages/                 ações que leem o mapa da mesma tela
@@ -96,7 +94,7 @@ A pasta `comparacaoCssXpath` fica ao lado desse fluxo. Ela repete o login com e-
 
 O relatório da suite é o arquivo `relatorio.md`, na raiz. No fim de cada `cypress run`, o Cypress chama `escreverRelatorio.js` e reescreve esse arquivo. O resumo, os specs e os cenários são da execução que acabou de terminar. A seção **Comparativo de navegadores**, no fim, conserva a última corrida de cada navegador: duração, testes, quantos passaram, quantos falharam e o resultado. Uma nova execução do mesmo navegador substitui só a linha dele. Quando um teste falha, o erro entra na seção de falhas. O comando `cypress open` não dispara essa gravação.
 
-No GitHub Actions, o workflow `Testes agendados` roda a suite no Electron, depois no Chrome, no Firefox e no Edge, no mesmo job. O `relatorio.md` publicado no artefato `relatorio` sai com as quatro linhas do comparativo. Isso acontece em cada push, toda segunda e quinta às 23:00 UTC, e também quando alguém dispara o workflow à mão. O Electron vem com o Cypress. O runner já traz o Chrome. O job instala o Microsoft Edge, porque a imagem do Ubuntu não inclui esse navegador, e instala o Firefox 128.14, porque o Firefox atual dessa imagem é mais novo do que o Cypress 13.7 consegue abrir.
+No GitHub Actions, o workflow `Testes agendados` roda a suite no Electron e depois no Chrome, no mesmo job. O `relatorio.md` publicado no artefato `relatorio` sai com o comparativo desses dois navegadores. Isso acontece em cada push, toda segunda e quinta às 23:00 UTC, e também quando alguém dispara o workflow à mão. O Electron vem com o Cypress. O runner já traz o Chrome.
 
 ## Casos de teste
 

@@ -4,7 +4,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const ordemNavegadores = ['electron', 'chrome', 'firefox', 'edge']
+const ordemNavegadores = ['electron', 'chrome']
 
 function duracao(ms) {
   const total = Math.round(Number(ms) || 0)
@@ -192,6 +192,10 @@ function escreverRelatorio(results, raiz) {
       linhas.push(`### ${falha.spec}`, '', falha.titulo, '', '```', falha.erro || 'Sem detalhe do erro.', '```', '')
     })
   }
+
+  Object.keys(comparativo).forEach((chave) => {
+    if (!ordemNavegadores.includes(chave)) delete comparativo[chave]
+  })
 
   const lista = ordenar(comparativo)
   linhas.push(
