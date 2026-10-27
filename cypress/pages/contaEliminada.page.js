@@ -1,4 +1,4 @@
-// Canal WEB, Cypress. Ações do ecrã Account Deleted.
+// Canal WEB, Cypress. Ações da tela Account Deleted.
 // Consome contaEliminadaElements; não repete a string do seletor.
 
 import { contaEliminadaElements as el } from '../elements/contaEliminada.elements'

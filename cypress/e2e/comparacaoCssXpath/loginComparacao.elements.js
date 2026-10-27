@@ -10,7 +10,7 @@ export const loginCssElements = {
   campoEmail: 'form[action="/login"] input[name="email"]',
   // Nível 4: name do campo, dentro do form de login.
   campoSenha: 'form[action="/login"] input[name="password"]',
-  // type="submit" sozinho também apanha Signup e a subscrição. O form de login torna-o único.
+  // type="submit" sozinho também pega o Signup e a assinatura. O form de login deixa o alvo único.
   botaoLogin: 'form[action="/login"] button[type="submit"]',
 }
 

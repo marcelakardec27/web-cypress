@@ -1,5 +1,5 @@
 // Canal WEB, Cypress. Spec de CSS tradicional da comparação de login.
-// Não contém seletor. A conta é criada aqui e o e-mail muda em cada corrida.
+// Não há seletor. A conta é criada aqui e o e-mail muda a cada execução.
 // O par XPath está em entrarComXpath.cy.js, na mesma pasta.
 
 import { homePage } from '../../pages/home.page'

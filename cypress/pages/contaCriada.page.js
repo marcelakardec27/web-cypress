@@ -1,4 +1,4 @@
-// Canal WEB, Cypress. Ações do ecrã Account Created.
+// Canal WEB, Cypress. Ações da tela Account Created.
 // Consome contaCriadaElements; não repete a string do seletor.
 
 import { contaCriadaElements as el } from '../elements/contaCriada.elements'

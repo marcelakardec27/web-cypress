@@ -1,4 +1,4 @@
-// Canal WEB, Cypress. Mapa do ecrã Account Created.
+// Canal WEB, Cypress. Mapa da tela Account Created.
 // Só seletores. As ações vivem em pages/contaCriada.page.js.
 
 export const contaCriadaElements = {

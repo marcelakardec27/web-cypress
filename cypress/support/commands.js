@@ -1,2 +1,2 @@
-// Canal WEB, Cypress. Commands partilhados.
+// Canal WEB, Cypress. Commands compartilhados.
 // Este fluxo não precisa de commands: o cenário importa as pages.

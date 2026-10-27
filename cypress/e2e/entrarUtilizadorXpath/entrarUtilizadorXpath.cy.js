@@ -1,6 +1,6 @@
-// Canal WEB, Cypress. Cenário XPath do Test Case 2: Login User with correct email and password.
-// Não contém seletor. O login usa loginXpathPage; o resto do fluxo reutiliza as pages já existentes.
-// A conta é criada aqui porque o site não guarda um utilizador fixo. O e-mail muda em cada corrida.
+// Canal WEB, Cypress. Cenário XPath do Caso de Teste 2 - Entrar com E-mail e Senha Corretos.
+// Não há seletor. O login usa loginXpathPage; o resto do fluxo reutiliza as pages já existentes.
+// A conta é criada aqui porque o site não mantém um usuário fixo. O e-mail muda a cada execução.
 
 import { homePage } from '../../pages/home.page'
 import { inscricaoPage } from '../../pages/inscricao.page'

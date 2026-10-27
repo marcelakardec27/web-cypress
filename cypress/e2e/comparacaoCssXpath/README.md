@@ -12,7 +12,7 @@ Esta pasta junta os ficheiros específicos da comparação e este texto. O caso 
 
 O `cy.xpath` vem da biblioteca `cypress-xpath`, carregada em `cypress/support/e2e.js`.
 
-O site não publica `data-cy`. O equivalente estável é `data-qa`, no mapa `cypress/elements/login.elements.js`, usado por `cypress/e2e/entrarUtilizador/entrarUtilizador.cy.js`.
+O site não publica `data-cy`. O equivalente estável é `data-qa`, no mapa `cypress/elements/login.elements.js`, usado por `cypress/e2e/Caso de Teste 2 - Entrar com E-mail e Senha Corretos/Caso de Teste 2 - Entrar com E-mail e Senha Corretos.cy.js`.
 
 ## Como executar
 

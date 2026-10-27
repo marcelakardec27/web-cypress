@@ -1,4 +1,4 @@
-// Canal WEB, Cypress. Mapa do ecrã Enter Account Information.
+// Canal WEB, Cypress. Mapa da tela Enter Account Information.
 // Só seletores. As ações vivem em pages/conta.page.js.
 
 export const contaElements = {
@@ -6,9 +6,9 @@ export const contaElements = {
   tituloInformacao: 'Enter Account Information',
   // Nível 3: o rádio Mr não tem data-qa. O id id_gender1 não é gerado em runtime.
   tituloMr: '#id_gender1',
-  // Nível 1: data-qa do nome, já preenchido a partir da inscrição.
+  // Nível 1: data-qa do nome, já preenchido a partir do cadastro.
   campoNome: '[data-qa=name]',
-  // Nível 1: data-qa do e-mail. O campo chega desativado, com o valor da inscrição.
+  // Nível 1: data-qa do e-mail. O campo chega desabilitado, com o valor do cadastro.
   campoEmail: '[data-qa=email]',
   // Nível 1: data-qa da senha.
   campoSenha: '[data-qa=password]',
@@ -24,13 +24,13 @@ export const contaElements = {
   opcaoOfertas: '#optin',
   // Nível 1: data-qa do primeiro nome.
   campoPrimeiroNome: '[data-qa=first_name]',
-  // Nível 1: data-qa do apelido.
+  // Nível 1: data-qa do sobrenome.
   campoApelido: '[data-qa=last_name]',
   // Nível 1: data-qa da empresa.
   campoEmpresa: '[data-qa=company]',
-  // Nível 1: data-qa da morada (o name do campo é address1).
+  // Nível 1: data-qa do endereço (o name do campo é address1).
   campoMorada: '[data-qa=address]',
-  // Nível 1: data-qa da segunda linha da morada.
+  // Nível 1: data-qa da segunda linha do endereço.
   campoMorada2: '[data-qa=address2]',
   // Nível 1: data-qa do país.
   campoPais: '[data-qa=country]',
@@ -38,9 +38,9 @@ export const contaElements = {
   campoEstado: '[data-qa=state]',
   // Nível 1: data-qa da cidade.
   campoCidade: '[data-qa=city]',
-  // Nível 1: data-qa do código postal.
+  // Nível 1: data-qa do CEP.
   campoCodigoPostal: '[data-qa=zipcode]',
-  // Nível 1: data-qa do telemóvel.
+  // Nível 1: data-qa do celular.
   campoTelemovel: '[data-qa=mobile_number]',
   // Nível 1: data-qa do botão Create Account.
   botaoCriarConta: '[data-qa=create-account]',

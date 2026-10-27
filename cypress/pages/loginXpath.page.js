@@ -1,4 +1,4 @@
-// Canal WEB, Cypress. Ações XPath da secção Login to your account.
+// Canal WEB, Cypress. Ações XPath da seção Login to your account.
 // Consome loginXpathElements; não repete a string do seletor.
 // cy.xpath vem de cypress-xpath, carregado em support/e2e.js.
 

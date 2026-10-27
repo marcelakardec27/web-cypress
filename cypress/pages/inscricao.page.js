@@ -1,4 +1,4 @@
-// Canal WEB, Cypress. Ações da secção New User Signup.
+// Canal WEB, Cypress. Ações da seção New User Signup.
 // Consome inscricaoElements; não repete a string do seletor.
 
 import { inscricaoElements as el } from '../elements/inscricao.elements'
@@ -15,7 +15,7 @@ export const inscricaoPage = {
     cy.get(el.botaoSignup).click()
   },
   verEmailExistente() {
-    // A frase só aparece depois de o site recusar um e-mail já registado.
+    // A frase só aparece depois que o site recusa um e-mail já cadastrado.
     cy.contains(el.mensagemEmailExistente).should('be.visible')
   },
 }

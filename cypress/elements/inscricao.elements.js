@@ -1,10 +1,10 @@
-// Canal WEB, Cypress. Mapa do ecrã Signup / Login, secção de novo utilizador.
+// Canal WEB, Cypress. Mapa da tela Signup / Login, seção de novo usuário.
 // Só seletores. As ações vivem em pages/inscricao.page.js.
 
 export const inscricaoElements = {
   // Nível 5: o título é o contrato do caso. O h2 não tem data-qa.
   tituloNovoUtilizador: 'New User Signup!',
-  // Nível 1: o site publica data-qa (não há data-cy) no nome do novo utilizador.
+  // Nível 1: o site publica data-qa (não há data-cy) no nome do novo usuário.
   campoNome: '[data-qa=signup-name]',
   // Nível 1: data-qa do e-mail de inscrição. Distinto do e-mail de login.
   campoEmail: '[data-qa=signup-email]',

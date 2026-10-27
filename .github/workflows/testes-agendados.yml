@@ -1,0 +1,38 @@
+# Corre a suite Cypress em cada push e duas vezes por semana.
+# O cron do GitHub Actions é UTC: segunda e quinta, 23:00.
+# Em Lisboa, no horário de inverno, isso é 23:00. No horário de verão, é 00:00 de terça e sexta.
+
+name: Testes agendados
+
+on:
+  push:
+  schedule:
+    - cron: "0 23 * * 1,4"
+  workflow_dispatch:
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          browser: electron
+
+      - name: Publicar relatório
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio
+          path: relatorio.md
+          if-no-files-found: warn

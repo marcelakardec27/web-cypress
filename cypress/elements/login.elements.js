@@ -1,4 +1,4 @@
-// Canal WEB, Cypress. Mapa da secção Login to your account, no ecrã Signup / Login.
+// Canal WEB, Cypress. Mapa da seção Login to your account, na tela Signup / Login.
 // Só seletores. As ações vivem em pages/login.page.js.
 
 export const loginElements = {
