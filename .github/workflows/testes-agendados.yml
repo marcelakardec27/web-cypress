@@ -1,7 +1,9 @@
 # Roda a suite Cypress em cada push e duas vezes por semana.
 # O cron do GitHub Actions é UTC: segunda e quinta, 23:00.
 # Em Lisboa, no horário de inverno, isso é 23:00. No horário de verão, é 00:00 de terça e sexta.
-# Cada execução cobre Chrome, Firefox e Edge. O Edge não vem no runner do Ubuntu.
+# Cada execução cobre Chrome, Firefox e Edge.
+# O Edge não vem no runner do Ubuntu.
+# O Firefox do runner é mais novo do que o Cypress 13.7 consegue abrir, então o job instala o Firefox 128.
 
 name: Testes agendados
 
@@ -30,6 +32,13 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Instalar Firefox
+        if: matrix.browser == 'firefox'
+        id: firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: "128.14.0esr"
+
       - name: Instalar Edge
         if: matrix.browser == 'edge'
         run: |
@@ -43,7 +52,7 @@ jobs:
       - name: Cypress
         uses: cypress-io/github-action@v6
         with:
-          browser: ${{ matrix.browser }}
+          browser: ${{ matrix.browser == 'firefox' && steps.firefox.outputs.firefox-path || matrix.browser }}
 
       - name: Publicar relatório
         if: always()
