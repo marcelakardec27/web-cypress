@@ -3,3 +3,5 @@ cypress/videos/
 cypress/screenshots/
 cypress/downloads/
 .env
+support/comparativo-navegadores.json
+browsers/

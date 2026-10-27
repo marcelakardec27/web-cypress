@@ -12,13 +12,91 @@ Os testes rodam em Cypress contra `http://automationexercise.com`. O site não m
 
 O e-mail de cada execução é novo. A senha e o endereço vêm da fixture `cypress/fixtures/utilizador.json`. O cartão dos pedidos é fictício.
 
-No GitHub Actions a suite roda no Chrome, no Firefox e no Edge. Na máquina local, o navegador entra com `--browser chrome`, `--browser firefox` ou `--browser edge`.
+## Como rodar
 
-Para executar os nove casos:
+O projeto não sobe servidor, banco nem tela própria. Os testes abrem um navegador e usam o site público. Quem for executar precisa de internet e do Node.js 20 ou mais novo. O npm acompanha essa instalação.
+
+Na pasta do projeto, instale as dependências uma vez. Esse comando traz o Cypress e o `cypress-xpath`. Na primeira execução, o Cypress ainda baixa o Electron.
 
 ```powershell
-npx cypress run --spec "cypress/e2e/Caso de Teste 1 - Registar Utilizador/Caso de Teste 1 - Registar Utilizador.cy.js,cypress/e2e/Caso de Teste 2 - Entrar com E-mail e Senha Corretos/Caso de Teste 2 - Entrar com E-mail e Senha Corretos.cy.js,cypress/e2e/Caso de Teste 3 - Entrar com E-mail e Senha Incorretos/Caso de Teste 3 - Entrar com E-mail e Senha Incorretos.cy.js,cypress/e2e/Caso de Teste 4 - Sair da Conta/Caso de Teste 4 - Sair da Conta.cy.js,cypress/e2e/Caso de Teste 5 - Registar Utilizador com E-mail Existente/Caso de Teste 5 - Registar Utilizador com E-mail Existente.cy.js,cypress/e2e/Caso de Teste 9 - Pesquisar Produto/Caso de Teste 9 - Pesquisar Produto.cy.js,cypress/e2e/Caso de Teste 10 - Verificar Subscrição na Página Inicial/Caso de Teste 10 - Verificar Subscrição na Página Inicial.cy.js,cypress/e2e/Caso de Teste 15 - Fazer Encomenda - Registar antes do Checkout/Caso de Teste 15 - Fazer Encomenda - Registar antes do Checkout.cy.js,cypress/e2e/Caso de Teste 16 - Fazer Encomenda - Entrar antes do Checkout/Caso de Teste 16 - Fazer Encomenda - Entrar antes do Checkout.cy.js"
+npm install
 ```
+
+Se a pasta `node_modules` já existir, a instalação já foi feita. Chrome e Edge precisam estar instalados no Windows. O Electron vem com o Cypress. O Firefox instalado na máquina pode ser mais novo do que o Cypress 13.7 consegue abrir. Na primeira execução com `--browser firefox`, o projeto baixa o Firefox 128 para `cypress/browsers` e usa essa cópia. O Firefox do sistema não é substituído.
+
+Os comandos abaixo partem da pasta do projeto.
+
+Os nove casos oficiais rodam de uma vez, sem janela:
+
+```powershell
+npx cypress run --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
+```
+
+Um caso só usa o caminho da pasta dele. O exemplo é o cadastro:
+
+```powershell
+npx cypress run --spec "cypress/e2e/Caso de Teste 1 - Registar Utilizador/Caso de Teste 1 - Registar Utilizador.cy.js"
+```
+
+Para ver o navegador durante o teste, troque o comando por `npx cypress open`, escolha E2E Testing, o navegador e o arquivo do caso. Essa forma interativa não grava o `relatorio.md`.
+
+Electron, Chrome, Firefox e Edge entram com `--browser`. Sem essa opção, o Cypress usa o Electron:
+
+```powershell
+npx cypress run --browser electron --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
+npx cypress run --browser chrome --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
+npx cypress run --browser firefox --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
+npx cypress run --browser edge --spec "cypress/e2e/Caso de Teste*/**/*.cy.js"
+```
+
+Sem `--spec`, o `npx cypress run` também executa a comparação entre CSS e XPath e o login por XPath. A suite fica com doze testes, não só os nove casos.
+
+Durante a execução o Cypress acessa `http://automationexercise.com`, gera um e-mail novo e percorre o caso. A senha e o endereço saem da fixture. No fim, o terminal mostra o que passou e o que falhou, e o arquivo `relatorio.md` da raiz é reescrito com o navegador, a duração e o resultado de cada cenário. A seção final compara a última execução de cada navegador: Electron, Chrome, Firefox e Edge. Rodar um deles de novo substitui só a linha daquele navegador. A suite dos nove casos leva cerca de quatro a cinco minutos.
+
+## Estrutura, padrão, relatório e navegadores
+
+O projeto separa o que se procura na tela, o que se faz com isso e o que o caso precisa provar. O mapa guarda o seletor. A página executa a ação. O cenário descreve o comportamento e não contém seletor.
+
+```text
+WEB/
+├── cypress.config.js          configuração do Cypress e gravação do relatório
+├── package.json
+├── README.md
+├── relatorio.md               última execução e comparativo dos navegadores
+├── .github/workflows/
+│   └── testes-agendados.yml   Electron, Chrome, Firefox e Edge no GitHub Actions
+└── cypress/
+    ├── elements/              um mapa por tela, só seletores
+    ├── pages/                 ações que leem o mapa da mesma tela
+    ├── fixtures/
+    │   └── utilizador.json    senha e endereço reutilizados
+    ├── support/
+    │   ├── e2e.js             carrega comandos e o cypress-xpath
+    │   ├── commands.js
+    │   └── escreverRelatorio.js
+    └── e2e/
+        ├── Caso de Teste 1 - Registar Utilizador/
+        ├── Caso de Teste 2 - Entrar com E-mail e Senha Corretos/
+        ├── Caso de Teste 3 - Entrar com E-mail e Senha Incorretos/
+        ├── Caso de Teste 4 - Sair da Conta/
+        ├── Caso de Teste 5 - Registar Utilizador com E-mail Existente/
+        ├── Caso de Teste 9 - Pesquisar Produto/
+        ├── Caso de Teste 10 - Verificar Subscrição na Página Inicial/
+        ├── Caso de Teste 15 - Fazer Encomenda - Registar antes do Checkout/
+        ├── Caso de Teste 16 - Fazer Encomenda - Entrar antes do Checkout/
+        ├── comparacaoCssXpath/    mesmo login em CSS e em XPath
+        └── entrarUtilizadorXpath/
+```
+
+Cada pasta de caso tem um arquivo com o mesmo nome e a extensão `.cy.js`. As telas mapeadas são início, login, inscrição, conta, conta criada, conta eliminada, produtos, carrinho, checkout e pagamento. O par `loginXpath` existe para o cenário que entra por XPath.
+
+O padrão adotado é o Padrão de Elementos. A chave do mapa diz a intenção, em camelCase e em português, como `campoEmail` ou `botaoLogin`. O valor é um seletor só. A escolha para no primeiro nível estável que a tela oferece: atributo `data-qa`, papel acessível, `id` que não muda a cada carga, `name` de formulário ou texto visível que o caso trata como contrato. O site não publica `data-cy`, então o `data-qa` ocupa esse lugar. A página não repete a string do seletor. O cenário chama a página e confirma página, mensagem, sessão ou pedido.
+
+A pasta `comparacaoCssXpath` fica ao lado desse fluxo. Ela repete o login com e-mail e senha corretos duas vezes, uma com CSS tradicional e outra com XPath relativo, para mostrar a diferença de leitura do mapa. O relato dessa comparação está em `cypress/e2e/comparacaoCssXpath/Relatorio-comparacao.md`.
+
+O relatório da suite é o arquivo `relatorio.md`, na raiz. No fim de cada `cypress run`, o Cypress chama `escreverRelatorio.js` e reescreve esse arquivo. O resumo, os specs e os cenários são da execução que acabou de terminar. A seção **Comparativo de navegadores**, no fim, conserva a última corrida de cada navegador: duração, testes, quantos passaram, quantos falharam e o resultado. Uma nova execução do mesmo navegador substitui só a linha dele. Quando um teste falha, o erro entra na seção de falhas. O comando `cypress open` não dispara essa gravação.
+
+No GitHub Actions, o workflow `Testes agendados` roda a suite no Electron, depois no Chrome, no Firefox e no Edge, no mesmo job. O `relatorio.md` publicado no artefato `relatorio` sai com as quatro linhas do comparativo. Isso acontece em cada push, toda segunda e quinta às 23:00 UTC, e também quando alguém dispara o workflow à mão. O Electron vem com o Cypress. O runner já traz o Chrome. O job instala o Microsoft Edge, porque a imagem do Ubuntu não inclui esse navegador, e instala o Firefox 128.14, porque o Firefox atual dessa imagem é mais novo do que o Cypress 13.7 consegue abrir.
 
 ## Casos de teste
 

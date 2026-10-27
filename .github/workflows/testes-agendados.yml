@@ -1,7 +1,8 @@
 # Roda a suite Cypress em cada push e duas vezes por semana.
 # O cron do GitHub Actions é UTC: segunda e quinta, 23:00.
 # Em Lisboa, no horário de inverno, isso é 23:00. No horário de verão, é 00:00 de terça e sexta.
-# Cada execução cobre Chrome, Firefox e Edge.
+# Electron, Chrome, Firefox e Edge rodam em sequência no mesmo job.
+# Assim o relatorio.md termina com o comparativo dos quatro.
 # O Edge não vem no runner do Ubuntu.
 # O Firefox do runner é mais novo do que o Cypress 13.7 consegue abrir, então o job instala o Firefox 128.
 
@@ -15,13 +16,9 @@ on:
 
 jobs:
   cypress:
-    name: Cypress (${{ matrix.browser }})
+    name: Cypress
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [chrome, firefox, edge]
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,14 +30,12 @@ jobs:
           cache: npm
 
       - name: Instalar Firefox
-        if: matrix.browser == 'firefox'
         id: firefox
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: "128.14.0esr"
 
       - name: Instalar Edge
-        if: matrix.browser == 'edge'
         run: |
           curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
           sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
@@ -49,15 +44,36 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y microsoft-edge-stable
 
-      - name: Cypress
+      - name: Cypress no Electron
         uses: cypress-io/github-action@v6
         with:
-          browser: ${{ matrix.browser == 'firefox' && steps.firefox.outputs.firefox-path || matrix.browser }}
+          browser: electron
+
+      - name: Cypress no Chrome
+        if: ${{ !cancelled() }}
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          install: false
+
+      - name: Cypress no Firefox
+        if: ${{ !cancelled() }}
+        uses: cypress-io/github-action@v6
+        with:
+          browser: ${{ steps.firefox.outputs.firefox-path }}
+          install: false
+
+      - name: Cypress no Edge
+        if: ${{ !cancelled() }}
+        uses: cypress-io/github-action@v6
+        with:
+          browser: edge
+          install: false
 
       - name: Publicar relatório
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: relatorio-${{ matrix.browser }}
+          name: relatorio
           path: relatorio.md
           if-no-files-found: warn
