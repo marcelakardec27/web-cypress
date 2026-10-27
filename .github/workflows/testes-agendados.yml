@@ -1,6 +1,7 @@
-# Corre a suite Cypress em cada push e duas vezes por semana.
+# Roda a suite Cypress em cada push e duas vezes por semana.
 # O cron do GitHub Actions é UTC: segunda e quinta, 23:00.
 # Em Lisboa, no horário de inverno, isso é 23:00. No horário de verão, é 00:00 de terça e sexta.
+# Cada execução cobre Chrome, Firefox e Edge. O Edge não vem no runner do Ubuntu.
 
 name: Testes agendados
 
@@ -12,8 +13,13 @@ on:
 
 jobs:
   cypress:
+    name: Cypress (${{ matrix.browser }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox, edge]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,15 +30,25 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Instalar Edge
+        if: matrix.browser == 'edge'
+        run: |
+          curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+          sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge-stable.list
+          sudo rm microsoft.gpg
+          sudo apt-get update
+          sudo apt-get install -y microsoft-edge-stable
+
       - name: Cypress
         uses: cypress-io/github-action@v6
         with:
-          browser: electron
+          browser: ${{ matrix.browser }}
 
       - name: Publicar relatório
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: relatorio
+          name: relatorio-${{ matrix.browser }}
           path: relatorio.md
           if-no-files-found: warn

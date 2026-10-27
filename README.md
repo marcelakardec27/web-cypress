@@ -12,6 +12,8 @@ Os testes rodam em Cypress contra `http://automationexercise.com`. O site não m
 
 O e-mail de cada execução é novo. A senha e o endereço vêm da fixture `cypress/fixtures/utilizador.json`. O cartão dos pedidos é fictício.
 
+No GitHub Actions a suite roda no Chrome, no Firefox e no Edge. Na máquina local, o navegador entra com `--browser chrome`, `--browser firefox` ou `--browser edge`.
+
 Para executar os nove casos:
 
 ```powershell
